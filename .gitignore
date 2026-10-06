@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+
+# Production Build
+dist/
+
+# Environment Variables
+.env
+.env.*
+!.env.example
+
+# Vercel & Cache
+.vercel/
+.cache/
+
+# System
+.DS_Store
+Thumbs.db

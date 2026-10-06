@@ -1,0 +1,643 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-base: #0A0A0A;
+    --bg-off: #111111;
+    --text-primary: #F0EDE8;
+    --text-muted: #8E8A83;
+    --border-subtle: rgba(217, 208, 193, 0.12);
+
+    /* Expand-On-Hover Gallery Core Dimensions (Skiper 52 / Aura Studio adapt) */
+    --gallery-k: 0.22;
+    --gallery-h: min(72vh, 40rem, calc((100vw - 3rem - 32px) / 1.45));
+    --gallery-on: calc(var(--gallery-h) * 9 / 16);
+    --gallery-off: calc(var(--gallery-on) * var(--gallery-k));
+    --gallery-radius: 1.5rem;
+    --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @media (max-width: 1024px) {
+    :root {
+      --gallery-k: 0.17;
+      --gallery-h: min(65vh, 34rem, calc((100vw - 2rem - 24px) / 1.25));
+      --gallery-radius: 1.25rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    :root {
+      --gallery-k: 0.14;
+      --gallery-h: min(58vh, 28rem, calc((100vw - 1.5rem - 16px) / 1.15));
+      --gallery-radius: 1rem;
+    }
+  }
+
+  .light {
+    --bg-base: #F5F0EB;
+    --bg-off: #ECE6DE;
+    --text-primary: #121212;
+    --text-muted: #5C5852;
+    --border-subtle: rgba(30, 30, 30, 0.15);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  /* Custom Sleek Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0A0A0A;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #2A2A2A;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #444444;
+  }
+}
+
+/* Halftone and Comic Texture Effects */
+.halftone-overlay {
+  background-image: radial-gradient(rgba(240, 237, 232, 0.12) 1px, transparent 0);
+  background-size: 8px 8px;
+  background-position: -4px -4px;
+}
+
+.comic-dots {
+  background-image: radial-gradient(rgba(107, 124, 94, 0.18) 1.5px, transparent 0);
+  background-size: 10px 10px;
+}
+
+.comic-dots-rose {
+  background-image: radial-gradient(rgba(158, 107, 107, 0.18) 1.5px, transparent 0);
+  background-size: 10px 10px;
+}
+
+.comic-dots-amber {
+  background-image: radial-gradient(rgba(166, 124, 82, 0.18) 1.5px, transparent 0);
+  background-size: 10px 10px;
+}
+
+/* Comic Speech Bubble */
+.comic-bubble {
+  position: relative;
+  border: 2px solid #0A0A0A;
+  background-color: #F0EDE8;
+  color: #0A0A0A;
+  box-shadow: 4px 4px 0px #0A0A0A;
+}
+
+.comic-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -12px;
+  left: 32px;
+  border-width: 12px 10px 0;
+  border-style: solid;
+  border-color: #F0EDE8 transparent;
+  display: block;
+  width: 0;
+}
+
+.comic-bubble::before {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 30px;
+  border-width: 14px 12px 0;
+  border-style: solid;
+  border-color: #0A0A0A transparent;
+  display: block;
+  width: 0;
+}
+
+/* Comic Badge & Stamp */
+.comic-stamp {
+  display: inline-block;
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 0.1em;
+  transform: rotate(-3deg);
+  box-shadow: 3px 3px 0px rgba(10, 10, 10, 0.8);
+  border: 2px solid currentColor;
+}
+
+/* Subtle Button Wipe Effect (Muted, NO neon) */
+.btn-wipe {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  transition: letter-spacing 0.3s ease, color 0.3s ease;
+}
+
+.btn-wipe::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: currentColor;
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+  z-index: -1;
+}
+
+.btn-wipe:hover::before {
+  opacity: 0.12;
+  transform: scaleX(1);
+}
+
+.btn-wipe:hover {
+  letter-spacing: 0.08em;
+}
+
+/* Editorial Drop Cap */
+.drop-cap::first-letter {
+  font-family: 'Playfair Display', serif;
+  float: left;
+  font-size: 3.5rem;
+  line-height: 0.8;
+  padding-top: 4px;
+  padding-right: 12px;
+  padding-bottom: 2px;
+  color: #D9D0C1;
+  font-weight: 700;
+}
+
+/* Dual Scroll styling */
+.horizontal-scroll-container {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.horizontal-scroll-container::-webkit-scrollbar {
+  display: none;
+}
+.horizontal-panel {
+  scroll-snap-align: start;
+}
+
+/* ========================================================
+   TOKYO LIGHTS THEME TRANSITION SYSTEM
+   ======================================================== */
+
+*, *::before, *::after {
+  transition-property: background-color, border-color, color, fill, stroke, box-shadow;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  transition-duration: 450ms;
+}
+
+/* Tokyo Lights Animations */
+@keyframes tokyoFlicker {
+  0% { opacity: 0; }
+  12% { opacity: 0.7; }
+  22% { opacity: 0.15; }
+  42% { opacity: 0.9; }
+  65% { opacity: 0.4; }
+  85% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes tokyoBloom {
+  0% { opacity: 0; transform: scale(0.9); }
+  25% { opacity: 0.9; transform: scale(1.02); }
+  65% { opacity: 0.45; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.04); }
+}
+
+@keyframes tokyoFlash {
+  0% { opacity: 0; }
+  20% { opacity: 0.75; }
+  45% { opacity: 0.2; }
+  75% { opacity: 0.55; }
+  100% { opacity: 0; }
+}
+
+@keyframes tokyoDim {
+  0% { opacity: 0; }
+  30% { opacity: 0.65; }
+  70% { opacity: 0.35; }
+  100% { opacity: 0; }
+}
+
+@keyframes tokyoAfterglow {
+  0% { opacity: 0; transform: translateY(25px); }
+  35% { opacity: 0.8; transform: translateY(0); }
+  70% { opacity: 0.35; }
+  100% { opacity: 0; transform: translateY(-12px); }
+}
+
+.animate-tokyo-flicker {
+  animation: tokyoFlicker 0.48s ease-out forwards;
+}
+
+.animate-tokyo-bloom {
+  animation: tokyoBloom 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-tokyo-flash {
+  animation: tokyoFlash 0.55s ease-out forwards;
+}
+
+.animate-tokyo-dim {
+  animation: tokyoDim 0.68s ease-out forwards;
+}
+
+.animate-tokyo-afterglow {
+  animation: tokyoAfterglow 0.68s ease-out forwards;
+}
+
+/* ========================================================
+   LIGHT MODE: ARCHITECTURAL EDITORIAL CANVAS (DAYLIGHT)
+   ======================================================== */
+
+html.light body,
+html.light .bg-kuro-base {
+  background-color: #F5F1EB !important;
+}
+
+html.light .bg-kuro-off {
+  background-color: #EBE4DA !important;
+}
+
+html.light .bg-kuro-charcoal {
+  background-color: #DFD7CC !important;
+}
+
+html.light .bg-kuro-gray {
+  background-color: #D6CCC0 !important;
+}
+
+html.light .text-canvas-offwhite {
+  color: #121212 !important;
+}
+
+html.light h1,
+html.light h2,
+html.light h3,
+html.light h4,
+html.light h5,
+html.light h6 {
+  color: #121212 !important;
+}
+
+html.light .text-white:not([class*="bg-black"]):not([class*="bg-black"] *):not(button.bg-black *):not(.force-white) {
+  color: #121212 !important;
+}
+
+/* Ensure inverted dark buttons & badges stay crisp white text */
+html.light button.bg-black,
+html.light button.bg-black *,
+html.light .bg-black,
+html.light .bg-black *,
+html.light .force-white {
+  color: #FFFFFF !important;
+}
+
+html.light .text-canvas-cream\/70,
+html.light .text-canvas-cream\/60,
+html.light .text-canvas-cream\/50,
+html.light .text-canvas-cream\/40,
+html.light .text-canvas-cream {
+  color: #38332E !important;
+}
+
+html.light .border-kuro-divider,
+html.light .border-kuro-divider\/60 {
+  border-color: rgba(30, 26, 22, 0.12) !important;
+}
+
+html.light .divide-kuro-divider {
+  border-color: rgba(30, 26, 22, 0.12) !important;
+}
+
+html.light header {
+  background-color: rgba(245, 241, 235, 0.94) !important;
+  border-bottom-color: rgba(30, 26, 22, 0.12) !important;
+}
+
+html.light ::-webkit-scrollbar-track {
+  background: #F5F1EB;
+}
+html.light ::-webkit-scrollbar-thumb {
+  background: #C4BAAC;
+}
+
+/* ========================================================
+   MOBILE SMOOTH UI & TOUCH ENHANCEMENTS
+   ======================================================== */
+
+html {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+body {
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Smooth Touch Interactions */
+@media (hover: none) and (pointer: coarse) {
+  button:active, a:active {
+    transform: scale(0.97);
+    transition: transform 0.08s ease;
+  }
+}
+
+/* ========================================================
+   FABRIC ROLL & TEXTILE NAVIGATION ANIMATIONS
+   ======================================================== */
+
+/* Woven twill & herringbone fabric texture overlay */
+.woven-texture {
+  background-image: 
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.025) 0, rgba(255, 255, 255, 0.025) 1px, transparent 0, transparent 6px),
+    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.025) 0, rgba(255, 255, 255, 0.025) 1px, transparent 0, transparent 6px);
+}
+
+.light .woven-texture {
+  background-image: 
+    repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.035) 0, rgba(0, 0, 0, 0.035) 1px, transparent 0, transparent 6px),
+    repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.035) 0, rgba(0, 0, 0, 0.035) 1px, transparent 0, transparent 6px);
+}
+
+/* Measuring tape edge markings */
+.measuring-tape-ruler {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(217, 208, 193, 0.35) 0px,
+    rgba(217, 208, 193, 0.35) 1px,
+    transparent 1px,
+    transparent 8px
+  );
+  background-size: 8px 100%;
+}
+
+.light .measuring-tape-ruler {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(18, 18, 18, 0.25) 0px,
+    rgba(18, 18, 18, 0.25) 1px,
+    transparent 1px,
+    transparent 8px
+  );
+}
+
+/* Running Thread Stitch Animation */
+@keyframes stitch-in {
+  0% {
+    stroke-dashoffset: 60;
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+.animate-thread-stitch {
+  stroke-dasharray: 4, 3;
+  animation: stitch-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Pinked Swatch Edge (serrated / zig-zag cloth edge) */
+.swatch-pinked-edge {
+  background-image: 
+    linear-gradient(135deg, transparent 50%, currentColor 50%),
+    linear-gradient(225deg, transparent 50%, currentColor 50%);
+  background-size: 8px 8px;
+  background-repeat: repeat-x;
+}
+
+/* Elastic Measuring Tape Overshoot Keyframes */
+@keyframes tape-unfurl {
+  0% {
+    opacity: 0;
+    transform: scaleY(0.1) translateY(-16px);
+    clip-path: inset(0 0 100% 0);
+  }
+  65% {
+    opacity: 1;
+    transform: scaleY(1.04) translateY(2px);
+    clip-path: inset(0 0 0% 0);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleY(1) translateY(0);
+    clip-path: inset(0 0 0% 0);
+  }
+}
+
+.animate-tape-unfurl {
+  transform-origin: top center;
+  animation: tape-unfurl 0.38s cubic-bezier(0.175, 0.885, 0.32, 1.15) forwards;
+}
+
+/* ==========================================================================
+   Expand-On-Hover Gallery Implementation (Skiper 52 / Aura Studio adapted for FENR)
+   ========================================================================== */
+/* ==========================================================================
+   Expand-On-Hover Gallery Implementation (Ultra-Smooth GPU Accelerated)
+   ========================================================================== */
+.expand-gallery-wrap {
+  width: 100%;
+  max-width: 84rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+  overflow: hidden;
+}
+
+.expand-gallery-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  user-select: none;
+  padding: 0.75rem 0;
+  contain: layout style;
+}
+
+.expand-gallery-item {
+  position: relative;
+  flex: none;
+  width: var(--gallery-off);
+  height: var(--gallery-h);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0;
+  border-radius: var(--gallery-radius);
+  overflow: hidden;
+  cursor: pointer;
+  background: #0d0e11;
+  transition: width 0.38s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.2s ease, 
+              box-shadow 0.25s ease;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  will-change: width;
+  contain: paint;
+}
+
+.light .expand-gallery-item {
+  border-color: rgba(0, 0, 0, 0.08);
+  background: #e6e3dd;
+}
+
+.expand-gallery-item:hover {
+  border-color: rgba(235, 185, 120, 0.4);
+}
+
+.expand-gallery-item.active {
+  width: var(--gallery-on);
+  border-color: rgba(235, 185, 120, 0.85);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.8), 
+              0 0 25px rgba(235, 185, 120, 0.12);
+}
+
+.light .expand-gallery-item.active {
+  border-color: rgba(18, 18, 18, 0.4);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15), 
+              0 0 25px rgba(0, 0, 0, 0.05);
+}
+
+.expand-gallery-item img, 
+.expand-gallery-item svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scale(1) translateZ(0);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
+  filter: brightness(0.85) contrast(1.05);
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+.expand-gallery-item.active img,
+.expand-gallery-item.active svg {
+  transform: scale(1.04) translateZ(0);
+  filter: brightness(1) contrast(1.05);
+}
+
+/* Gradient Shading */
+.expand-gallery-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10, 10, 10, 0.95) 0%, rgba(10, 10, 10, 0.45) 45%, rgba(10, 10, 10, 0.15) 75%, transparent 100%);
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.light .expand-gallery-shade {
+  background: linear-gradient(to top, rgba(20, 20, 20, 0.9) 0%, rgba(20, 20, 20, 0.35) 45%, transparent 100%);
+}
+
+.expand-gallery-item.active .expand-gallery-shade {
+  opacity: 0.92;
+}
+
+/* Inactive Vertical Teaser Tag */
+.expand-gallery-inactive-tag {
+  position: absolute;
+  top: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%) translateZ(0);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 5;
+  backface-visibility: hidden;
+}
+
+.expand-gallery-inactive-tag .num {
+  font-family: 'Space Grotesk', 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(10, 10, 10, 0.75);
+  padding: 0.2rem 0.5rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.light .expand-gallery-inactive-tag .num {
+  color: #121212;
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+.expand-gallery-inactive-tag .vert-text {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(240, 237, 232, 0.7);
+  font-weight: 700;
+  margin-top: 0.75rem;
+  white-space: nowrap;
+}
+
+.light .expand-gallery-inactive-tag .vert-text {
+  color: rgba(20, 20, 20, 0.75);
+}
+
+.expand-gallery-item.active .expand-gallery-inactive-tag {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-10px) translateZ(0);
+}
+
+/* Active Card Content Overlay - fixed width prevents text re-flow while expanding */
+.expand-gallery-active-content {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: var(--gallery-on);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  opacity: 0;
+  transform: translateY(8px) translateZ(0);
+  pointer-events: none;
+  transition: opacity 0.28s 0.06s ease, transform 0.32s 0.06s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 10;
+  backface-visibility: hidden;
+}
+
+.expand-gallery-item.active .expand-gallery-active-content {
+  opacity: 1;
+  transform: translateY(0) translateZ(0);
+  pointer-events: auto;
+}
+
+.expand-gallery-item:focus-visible {
+  outline: 3px solid #E5A84B;
+  outline-offset: 4px;
+}
+
+
+
