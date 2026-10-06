@@ -10,7 +10,9 @@ import { Product, ProductSize, Order } from './types';
 // Components
 import { CustomCursor } from './components/CustomCursor';
 import { TokyoLightingEffect } from './components/TokyoLightingEffect';
+import { AnimatePresence } from 'motion/react';
 import { TokyoTopographicBackground } from './components/TokyoTopographicBackground';
+import { PageLoader } from './components/PageLoader';
 import { LoadingScreen } from './components/LoadingScreen';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
@@ -94,8 +96,17 @@ export const AppContent: React.FC = () => {
       {/* Architectural Tokyo Topographic & Sonar Wave Background (ACRONYM / Nike ISPA style) */}
       <TokyoTopographicBackground />
 
-      {/* Intro Loading Screen (skippable) */}
-      {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
+      {/* Awwwards / Nike-style Kinetic Multi-Layer Curtain Page Loader */}
+      <AnimatePresence mode="wait">
+        {isLoading && (
+          <PageLoader
+            key="preloader"
+            words={["JUST", "DO", "IT."]}
+            duration={2}
+            onComplete={() => setIsLoading(false)}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Fixed Minimal Top Navbar */}
       <Navbar
