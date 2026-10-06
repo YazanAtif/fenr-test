@@ -102,7 +102,7 @@ export const AppContent: React.FC = () => {
           <PageLoader
             key="preloader"
             words={["FEAR", "NOTHING"]}
-            duration={2}
+            duration={2.8}
             onComplete={() => setIsLoading(false)}
           />
         )}
