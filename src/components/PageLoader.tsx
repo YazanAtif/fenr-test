@@ -154,11 +154,11 @@ export default function PageLoader({
         <div className="relative z-10 flex items-center justify-between text-[11px] uppercase tracking-[0.35em] font-mono">
           <div className="flex items-center gap-2.5">
             <span className="inline-block w-2 h-2 rounded-full bg-[#E62846] shadow-[0_0_10px_rgba(230,40,70,0.85)] animate-pulse" />
-            <span className="text-[#A67C52] font-semibold tracking-[0.3em]">
+            <span className="text-[#F0EDE8] font-semibold tracking-[0.3em]">
               FENR
             </span>
             <span className="text-[#5B6A8A]/60 font-mono">//</span>
-            <span className="text-[#9E6B6B] font-medium tracking-[0.3em]">
+            <span className="text-[#F0EDE8] font-medium tracking-[0.3em]">
               LOADING
             </span>
           </div>
@@ -180,40 +180,30 @@ export default function PageLoader({
         {/* --- Center: stacked wordmark, each line slides in --- */}
         <div className="relative z-10 flex flex-1 items-center">
           <h1 className="text-[15vw] font-bold uppercase leading-[0.82] tracking-tighter md:text-[9vw] font-display">
-            {words.map((word, i) => {
-              const isRed =
-                word.toUpperCase().includes("NOTHING") ||
-                word.toUpperCase().includes("NONTHING");
-
-              return (
-                <span key={`${word}-${i}`} className="block overflow-hidden">
-                  <motion.span
-                    className={`block ${
-                      isRed
-                        ? "text-[#E62846] drop-shadow-[0_8px_36px_rgba(230,40,70,0.55)]"
-                        : "text-[#F0EDE8] drop-shadow-[0_8px_32px_rgba(0,0,0,0.6)]"
-                    }`}
-                    initial={{ y: "110%" }}
-                    animate={{ y: exiting ? "-110%" : "0%" }}
-                    transition={{
-                      duration: reduce ? 0.3 : 0.8,
-                      ease: LIFT_EASE,
-                      delay: exiting ? 0 : 0.12 * i,
-                    }}
-                  >
-                    {word}
-                  </motion.span>
-                </span>
-              );
-            })}
+            {words.map((word, i) => (
+              <span key={`${word}-${i}`} className="block overflow-hidden">
+                <motion.span
+                  className="block text-[#F0EDE8] drop-shadow-[0_8px_32px_rgba(0,0,0,0.6)]"
+                  initial={{ y: "110%" }}
+                  animate={{ y: exiting ? "-110%" : "0%" }}
+                  transition={{
+                    duration: reduce ? 0.3 : 0.8,
+                    ease: LIFT_EASE,
+                    delay: exiting ? 0 : 0.12 * i,
+                  }}
+                >
+                  {word}
+                </motion.span>
+              </span>
+            ))}
           </h1>
         </div>
 
-        {/* --- Bottom: hairline pure white progress bar --- */}
+        {/* --- Bottom: hairline red progress bar --- */}
         <div className="relative z-10 w-full pb-2">
-          <div className="h-[2px] w-full bg-white/20 overflow-hidden rounded-full">
+          <div className="h-[2px] w-full bg-white/10 overflow-hidden rounded-full">
             <motion.div
-              className="h-full bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]"
+              className="h-full bg-[#E62846] shadow-[0_0_10px_rgba(230,40,70,0.8)]"
               style={{
                 scaleX: progress / 100,
                 transformOrigin: "left",
